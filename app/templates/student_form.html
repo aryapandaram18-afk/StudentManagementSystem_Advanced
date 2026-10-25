@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Student</title>
+</head>
+<body>
+    <main>
+        <h1>Add New Student</h1>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <p role="alert" class="{{ category }}">
+                        {{ message }}
+                    </p>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <form method="POST" action="{{ url_for('students.add_student') }}">
+            <p>
+                <label for="name">Student Name:</label><br>
+                <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    value="{{ request.form.get('name', '') }}"
+                    required
+                >
+            </p>
+
+            <p>
+                <label for="prn">PRN:</label><br>
+                <input
+                    type="text"
+                    id="prn"
+                    name="prn"
+                    value="{{ request.form.get('prn', '') }}"
+                    required
+                >
+            </p>
+
+            <p>
+                <label for="department">Department:</label><br>
+                <input
+                    type="text"
+                    id="department"
+                    name="department"
+                    value="{{ request.form.get('department', '') }}"
+                    required
+                >
+            </p>
+
+            <p>
+                <label for="email">Email:</label><br>
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    value="{{ request.form.get('email', '') }}"
+                    required
+                >
+            </p>
+
+            <button type="submit">Save Student</button>
+        </form>
+
+        <p>
+            <a href="{{ url_for('students.dashboard') }}">
+                Back to Dashboard
+            </a>
+        </p>
+    </main>
+</body>
+</html>

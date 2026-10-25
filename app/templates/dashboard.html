@@ -1,0 +1,92 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Management System</title>
+</head>
+<body>
+    <main>
+        <h1>Student Management System</h1>
+
+        <h2>Welcome, {{ session.get("username", "User") }}!</h2>
+
+        <p>
+            Role:
+            <strong>{{ session.get("role", "staff")|capitalize }}</strong>
+        </p>
+
+        <hr>
+
+        <h2>Student Records</h2>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <p role="alert" class="{{ category }}">
+                        {{ message }}
+                    </p>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <p>Total students: {{ students|length }}</p>
+
+        <p>
+            <a href="{{ url_for('students.add_student') }}">Add Student</a>
+        </p>
+
+        {% if students %}
+            <table border="1" cellpadding="8" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>PRN</th>
+                        <th>Name</th>
+                        <th>Department</th>
+                        <th>Email</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for student in students %}
+                        <tr>
+                            <td>{{ student["id"] }}</td>
+                            <td>{{ student["prn"] }}</td>
+                            <td>{{ student["name"] }}</td>
+                            <td>{{ student["department"] }}</td>
+                            <td>{{ student["email"] }}</td>
+                            
+<td>
+    <a href="{{ url_for('students.edit_student', student_id=student['id']) }}">
+        Edit
+    </a>
+
+    <form
+        method="POST"
+        action="{{ url_for('students.delete_student', student_id=student['id']) }}"
+        style="display: inline;"
+        onsubmit="return confirm('Are you sure you want to delete this student?');"
+    >
+        <button type="submit">Delete</button>
+    </form>
+</td>
+
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>No student records found. Add your first student!</p>
+        {% endif %}
+
+        <hr>
+
+        <form method="POST" action="{{ url_for('auth.logout') }}">
+            <button type="submit">Logout</button>
+        </form>
+    </main>
+</body>
+</html>
+ 
